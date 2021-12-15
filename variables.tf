@@ -88,6 +88,16 @@ variable "external_account_binding" {
   default = null
 }
 
+variable "route_53_dns" {
+  type = object({
+    access_key     = string
+    secret_key     = string
+    default_region = string
+  })
+  default   = null
+  sensitive = true
+}
+
 variable "azure_dns" {
   type = object({
     subscription_id = string
@@ -158,6 +168,12 @@ locals {
     "Acmebot:ExternalAccountBinding:Algorithm" = var.external_account_binding.algorithm
   } : {}
 
+  route_53_dns = var.route_53_dns != null ? {
+    "Acmebot:Route53:AccessKey" = var.route_53_dns.access_key
+    "Acmebot:Route53:SecretKey" = var.route_53_dns.secret_key
+    "Acmebot:Route53:Region" = var.route_53_dns.default_region
+  } : {}
+
   azure_dns = var.azure_dns != null ? {
     "Acmebot:AzureDns:SubscriptionId" = var.azure_dns.subscription_id
   } : {}
@@ -213,6 +229,7 @@ locals {
     local.common,
     local.external_account_binding,
     local.azure_dns,
+    local.route_53_dns,
     local.cloudflare,
     local.custom_dns,
     local.dns_made_easy,
