@@ -6,8 +6,9 @@ resource "azurerm_storage_account" "storage" {
   account_tier              = "Standard"
   account_replication_type  = "LRS"
   enable_https_traffic_only = true
-  allow_blob_public_access  = false
   min_tls_version           = "TLS1_2"
+
+  allow_nested_items_to_be_public = false
 }
 
 resource "azurerm_app_service_plan" "serverfarm" {
